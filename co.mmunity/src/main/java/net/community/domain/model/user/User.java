@@ -3,12 +3,15 @@ package net.community.domain.model.user;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -59,10 +62,13 @@ public class User {
 	@Size(min = 1, max = 20)
 	private String password;
 	
-	@NotEmpty
+	//@NotEmpty
 	@Getter
 	@Setter
+	@OneToOne
+	@JoinColumn(name = "role_id")
 	private Role role;
+	
 	
 	@OneToMany(fetch = FetchType.EAGER)
 	//FETCH :
@@ -70,11 +76,13 @@ public class User {
 	//LAZY : la valeur est chargée uniquement lors de son utilisation
 	//EAGER : la valeur est toujours chargée (valeur par défaut)
 	//Cette fonctionnalité permet de limiter la quantité de données obtenue par une requête
+	@JoinColumn(name = "tags_id")
 	@Getter
 	@Setter
 	private Set<Tag>tags= new HashSet<Tag>();
 	
 	@OneToMany
+	@JoinColumn(name = "pictures_id")
 	@Getter
 	@Setter
 	private Set<Picture>pictures = new HashSet<Picture>();

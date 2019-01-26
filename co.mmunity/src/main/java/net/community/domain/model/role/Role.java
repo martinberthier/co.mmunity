@@ -17,7 +17,7 @@ public class Role {
 	@Getter
 	private long id;
 	
-	@NotEmpty
+	//@NotEmpty
 	@Getter
 	@Setter
 	private String description;
