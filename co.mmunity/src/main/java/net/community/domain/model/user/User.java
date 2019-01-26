@@ -79,9 +79,7 @@ public class User {
 	@Setter
 	private Set<Picture>pictures = new HashSet<Picture>();
 
-	protected User() {
-		super();
-	}
+	protected User() {}
 
 	public User(@NotEmpty String lastname, @NotEmpty String surname, @NotEmpty String job, @NotEmpty String email,
 			@NotEmpty String password, @NotEmpty Role role, Set<Tag> tags, Set<Picture> pictures) {

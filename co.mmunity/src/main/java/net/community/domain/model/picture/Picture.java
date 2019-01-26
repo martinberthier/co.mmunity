@@ -24,9 +24,7 @@ public class Picture {
 	@Setter
 	private String url;
 
-	protected Picture() {
-		super();
-	}
+	protected Picture() {}
 
 	public Picture(String pictureComment, String url) {
 		super();

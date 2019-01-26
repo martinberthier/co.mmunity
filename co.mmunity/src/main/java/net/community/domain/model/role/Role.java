@@ -22,9 +22,7 @@ public class Role {
 	@Setter
 	private String description;
 
-	protected Role() {
-		super();
-	}
+	protected Role() {}
 
 	public Role(String description) {
 		super();

@@ -19,9 +19,7 @@ public class Tag {
 	@Setter
 	private String libelle;
 
-	protected Tag() {
-		super();
-	}
+	protected Tag() {}
 
 	public Tag(String libelle) {
 		super();
