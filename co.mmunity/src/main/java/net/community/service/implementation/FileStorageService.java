@@ -1,4 +1,4 @@
-package net.community.service;
+package net.community.service.implementation;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -17,11 +17,12 @@ import org.springframework.web.multipart.MultipartFile;
 import net.community.exception.FileStorageException;
 import net.community.exception.MyFileNotFoundException;
 import net.community.property.FileStorageProperties;
+import net.community.service.IFileStorageService;
 
 
 
 @Service
-public class FileStorageService {
+public class FileStorageService implements IFileStorageService{
 
     private final Path fileStorageLocation;
 

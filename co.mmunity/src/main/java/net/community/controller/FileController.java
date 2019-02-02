@@ -23,8 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import net.community.payload.UploadFileResponse;
-import net.community.service.FileStorageService;
-
+import net.community.service.IFileStorageService;
 
 
 @RestController
@@ -33,7 +32,7 @@ public class FileController {
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
     @Autowired
-    private FileStorageService fileStorageService;
+    IFileStorageService fileStorageService;
 
     @PostMapping("/uploadFile")
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
