@@ -1,8 +1,17 @@
 package net.community.domain.model.picture;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface IPictureRepository extends JpaRepository <Picture, Long> {
+import net.community.domain.model.user.User;
 
+public interface IPictureRepository extends JpaRepository <Picture, Long> {
+	
+	List<Picture> findByUser(User user);
+	
+	Picture findById(long id);
+	
+	Picture findByName(String name);
 }
 

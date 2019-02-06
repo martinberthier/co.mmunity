@@ -33,7 +33,7 @@ public class AdminController {
 			
 		}
 		
-		//Getuser(getavec pathvariablepour lâ€™id)
+		//Getuser(getavec pathvariablepour l'id)
 		@GetMapping("/{id}")
 		public User getUser(@PathVariable long id) {
 			return adminService.getUser(id);
@@ -45,7 +45,7 @@ public class AdminController {
 			return adminService.listerUsers();
 		}
 		
-		//DeleteUser(Deleteavec pathvariablepour lâ€™id)
+		//DeleteUser(Deleteavec pathvariablepour l'id)
 		@DeleteMapping("/deleteuser/{id}")
 		public void deleteUser(@PathVariable long id) {
 			adminService.deleteUser(id);

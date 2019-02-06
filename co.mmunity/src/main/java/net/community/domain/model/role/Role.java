@@ -1,32 +1,41 @@
 package net.community.domain.model.role;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.NotEmpty;
+import javax.persistence.ManyToMany;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import net.community.domain.model.user.User;
 
 @Entity
+@Data
 public class Role {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Getter
 	private long id;
 	
 	//@NotEmpty
-	@Getter
-	@Setter
-	private String description;
+	private String name;
+	
+	@ManyToMany
+	private Set<User> users = new HashSet<User> ();
 
 	protected Role() {}
 
-	public Role(String description) {
+	public Role(String name, Set<User> users) {
 		super();
-		this.description = description;
+		this.name = name;
+		this.users = users;
 	}
+
+	
+
+	
 
 }

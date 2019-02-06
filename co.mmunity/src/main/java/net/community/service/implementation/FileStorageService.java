@@ -47,7 +47,9 @@ public class FileStorageService implements IFileStorageService{
             if(fileName.contains("..")) {
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
-
+            //appeler le service image et créer en bdd une entrée qui contient le nom de l'image et le nom de l'utilisateur qui est loggé donc on le récupère dans la requete (son id)
+            //créer un dossier lors de l'upload de l'image qui s'appelle id de l'utilisateur, stocke les iamges (en gardant la ref en base)
+            //vérifier le nombre d'image (pas plus de 4)
             // Copy file to the target location (Replacing existing file with the same name)
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);

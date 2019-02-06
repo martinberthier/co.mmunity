@@ -1,0 +1,43 @@
+césar
+marcel
+arsene
+louis
+pierre
+arthur
+corentin
+maxime
+jules
+paul
+camille
+christophe
+léon
+jean
+julien
+
+
+port mySQL 3306
+TOMCAT  8080
+http 80
+https 443
+
+créer un projet starter pring boot :package racine : co.simplon(.model?)
+ajouter les dépendances JPA et MySQL et Validation
+créer le model UML + les deux repository associés
+créer la bdd dans sql
+
+
+////////////////////////
+poste : classe à part avec libellé
+pas d'admin mais classe role
+
+faire les user stories
+unifier langue en anglais
+prévoir backup en fr : use case et user stories
+
+package model
+une entity+repo par package - cf foulestaque
+package controller : chaque use case est un controller
+test unitaires du model - creation de la bdd utilisateurs - avec table photos
+curl tester les webservices
+
+classe populate est un component pour pouvoir autowired
