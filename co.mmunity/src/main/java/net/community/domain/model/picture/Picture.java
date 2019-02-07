@@ -11,12 +11,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
 import net.community.domain.model.user.User;
+import net.community.payload.UploadFileResponse;
 
 @Entity
 @Data
@@ -34,15 +38,20 @@ public class Picture {
 	
 	@ManyToOne
 	private User user;
+	
+	@OneToOne
+	@JoinColumn(name = "uploadFileresponse_id")
+	private UploadFileResponse thisUploadFileResponse;
 
 	protected Picture() {}
 
-	public Picture(String name, String pictureComment, Long size, User user) {
+	public Picture(String name, String pictureComment, Long size, User user, UploadFileResponse thisUploadFileResponse) {
 		super();
 		this.name = name;
 		this.pictureComment = pictureComment;
 		this.size = size;
 		this.user = user;
+		this.thisUploadFileResponse = thisUploadFileResponse;
 	}
 
 	public boolean isJpg(MultipartFile multipartFile) throws IOException{

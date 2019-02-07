@@ -31,7 +31,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import net.community.domain.model.picture.IPictureRepository;
+import net.community.domain.model.picture.Picture;
 import net.community.domain.model.user.IUserRepository;
+import net.community.domain.model.user.User;
 import net.community.payload.UploadFileResponse;
 import net.community.service.IFileStorageService;
 
@@ -55,9 +57,9 @@ public class RegularController {
 	    IFileStorageService fileStorageService;
 	    
 	    
-	    @PostMapping("/uploadFile")
+	    @PostMapping("/{userId}/uploadFile")
 	    //@PathVariable Long userId, 
-	    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+	    public ResponseEntity<?> uploadFile(@PathVariable Long userId, @RequestParam("file") MultipartFile file) throws IOException {
 	        
 	    	
 	    	if(isJpgOrPng(file)!=true) {
@@ -66,9 +68,8 @@ public class RegularController {
 	    		
 	    	} else {
 	    		
-	    	
 		    	String fileName = fileStorageService.storeFile(file);
-	
+		    	
 		        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
 		                .path("/regular/downloadFile/")
 		                .path(fileName)
@@ -76,6 +77,9 @@ public class RegularController {
 		        
 		        UploadFileResponse thisUploadFileResponse = new UploadFileResponse(fileName, fileDownloadUri,
 		                file.getContentType(), file.getSize());
+		        
+		        Picture pic = new Picture(fileName,"comment here",file.getSize(),users.findById(userId).get(),thisUploadFileResponse);
+		    	pictures.save(pic);
 		               
 		        return new ResponseEntity  <UploadFileResponse> (thisUploadFileResponse, HttpStatus.OK);
 	    		}

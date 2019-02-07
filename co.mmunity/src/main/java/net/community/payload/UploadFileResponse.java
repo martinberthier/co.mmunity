@@ -1,10 +1,26 @@
 package net.community.payload;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+import lombok.Data;
+
+@Entity
+@Data
 public class UploadFileResponse {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
+	
     private String fileName;
     private String fileDownloadUri;
     private String fileType;
     private long size;
+    
+    
 
     public UploadFileResponse(String fileName, String fileDownloadUri, String fileType, long size) {
         this.fileName = fileName;
@@ -44,4 +60,8 @@ public class UploadFileResponse {
     public void setSize(long size) {
         this.size = size;
     }
+
+	protected UploadFileResponse() {}
+    
+    
 }
