@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -53,23 +54,15 @@ public class RegularController {
 	    @Autowired
 	    IFileStorageService fileStorageService;
 	    
-
+	    
 	    @PostMapping("/uploadFile")
 	    //@PathVariable Long userId, 
-	    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+	    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
 	        
 	    	
 	    	if(isJpgOrPng(file)!=true) {
 	    		
-	    		String fileName = fileStorageService.storeFile(file);
-	    		
-		        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-		                .path("/blabla/downloadFile/")
-		                .path(fileName)
-		                .toUriString();
-	
-		        return new UploadFileResponse(fileName, fileDownloadUri,
-		                file.getContentType(), file.getSize());
+	    		return new ResponseEntity<String>("The file is neither a jpg nor a png", HttpStatus.CONFLICT);
 	    		
 	    	} else {
 	    		
@@ -80,14 +73,50 @@ public class RegularController {
 		                .path("/regular/downloadFile/")
 		                .path(fileName)
 		                .toUriString();
-	
-		        return new UploadFileResponse(fileName, fileDownloadUri,
+		        
+		        UploadFileResponse thisUploadFileResponse = new UploadFileResponse(fileName, fileDownloadUri,
 		                file.getContentType(), file.getSize());
-	    	
+		               
+		        return new ResponseEntity  <UploadFileResponse> (thisUploadFileResponse, HttpStatus.OK);
+	    		}
 	    	}
 	    	
-	    	
-	    }
+		
+	    
+//	    la v2
+//	    @PostMapping("/uploadFile")
+//	    //@PathVariable Long userId, 
+//	    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+//	        
+//	    	
+//	    	if(isJpgOrPng(file)!=true) {
+//	    		
+//	    		String fileName = fileStorageService.storeFile(file);
+//	    		
+//		        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+//		                .path("/blabla/downloadFile/")
+//		                .path(fileName)
+//		                .toUriString();
+//	
+//		        return new UploadFileResponse(fileName, fileDownloadUri,
+//		                file.getContentType(), file.getSize());
+//	    		
+//	    	} else {
+//	    		
+//	    	
+//		    	String fileName = fileStorageService.storeFile(file);
+//	
+//		        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+//		                .path("/regular/downloadFile/")
+//		                .path(fileName)
+//		                .toUriString();
+//	
+//		        return new UploadFileResponse(fileName, fileDownloadUri,
+//		                file.getContentType(), file.getSize());
+//	    	
+//	    	}
+//
+//	    }
 	    
 //	    //la V1
 //	    @PostMapping("/uploadFile")
