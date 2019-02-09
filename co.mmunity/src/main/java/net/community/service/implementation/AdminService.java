@@ -28,13 +28,9 @@ public class AdminService implements IAdminService {
 	}
 	
 	@Override
-	public User getUser(long id) {
-
-		Optional<User> toFind = users.findById(id);
-
-		if (!toFind.isPresent())
-			return null;
-		return users.findById(id).get();
+	public User getUser(long id) {	
+		
+		return users.findById(id);
 	}
 
 	@Override

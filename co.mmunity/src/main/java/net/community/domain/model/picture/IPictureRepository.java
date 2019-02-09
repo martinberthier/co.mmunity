@@ -10,6 +10,8 @@ public interface IPictureRepository extends JpaRepository <Picture, Long> {
 	
 	List<Picture> findByUser(User user);
 	
+	List<Picture> findByUserId(long id);
+	
 	Picture findById(long id);
 	
 	Picture findByName(String name);

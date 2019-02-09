@@ -51,26 +51,26 @@ public class ApplicationTests {
 		//populate.nettoyage();
 	}
 	
-	@Test
-	public void contextLoads() {
-		Role vip = new Role("vip");
-		roles.save(vip);
-		
-		Tag dormir = new Tag("dormir");
-		tags.save(dormir);
-		
-		Set<Tag>tagsAntoine = new HashSet<Tag>();
-		tagsAntoine.add(dormir);
-		
-		Picture photoAntoine = new Picture("bonjour!","url12.com");
-		pictures.save(photoAntoine);
-		
-		Set<Picture>photosAntoine = new HashSet<Picture>();
-		photosAntoine.add(photoAntoine);
-		
-		User antoine = new User("Peglion","Antoine","stagiaire","bactave@mail.com","mypassword",vip,tagsAntoine, photosAntoine);
-		users.save(antoine);
-	}
+//	@Test
+//	public void contextLoads() {
+//		Role vip = new Role("vip");
+//		roles.save(vip);
+//		
+//		Tag dormir = new Tag("dormir");
+//		tags.save(dormir);
+//		
+//		Set<Tag>tagsAntoine = new HashSet<Tag>();
+//		tagsAntoine.add(dormir);
+//		
+//		Picture photoAntoine = new Picture("bonjour!","url12.com");
+//		pictures.save(photoAntoine);
+//		
+//		Set<Picture>photosAntoine = new HashSet<Picture>();
+//		photosAntoine.add(photoAntoine);
+//		
+//		User antoine = new User("Peglion","Antoine","stagiaire","bactave@mail.com","mypassword",vip,tagsAntoine, photosAntoine);
+//		users.save(antoine);
+//	}
 
 }
 

@@ -1,6 +1,8 @@
 package net.community.domain.model.user;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -15,6 +17,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import co.simplon.crud.model.task.Task;
 import lombok.Data;
 import net.community.domain.model.picture.Picture;
 import net.community.domain.model.role.Role;
@@ -93,6 +96,10 @@ public class User {
 		this.pictures.add(picture);
 	}
 
+	public List<Picture> getPictures()
+	{
+		return new ArrayList<Picture>(pictures);
+	}
 	
 	
 }

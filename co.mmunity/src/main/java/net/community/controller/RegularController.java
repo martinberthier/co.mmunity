@@ -6,12 +6,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.filefilter.MagicNumberFileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import co.simplon.crud.model.project.Project;
+import co.simplon.crud.model.task.Task;
 import net.community.domain.model.picture.IPictureRepository;
 import net.community.domain.model.picture.Picture;
 import net.community.domain.model.user.IUserRepository;
@@ -55,20 +60,21 @@ public class RegularController {
 
 	    @Autowired
 	    IFileStorageService fileStorageService;
-	    
+	
 	    
 	    @PostMapping("/{userId}/uploadFile")
-	    //@PathVariable Long userId, 
-	    public ResponseEntity<?> uploadFile(@PathVariable Long userId, @RequestParam("file") MultipartFile file) throws IOException {
+	    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable Long userId) throws Exception {
 	        
 	    	
-	    	if(isJpgOrPng(file)!=true) {
+	    	String mimeType = file.getContentType();
+	        String type = mimeType.split("/")[0];
+	        if (!type.equalsIgnoreCase("image")) {
 	    		
-	    		return new ResponseEntity<String>("The file is neither a jpg nor a png", HttpStatus.CONFLICT);
+	    		return new ResponseEntity<String>("The file is not an image", HttpStatus.CONFLICT);
 	    		
 	    	} else {
 	    		
-		    	String fileName = fileStorageService.storeFile(file);
+		    	String fileName = userId+fileStorageService.storeFile(file);
 		    	
 		        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
 		                .path("/regular/downloadFile/")
@@ -78,14 +84,29 @@ public class RegularController {
 		        UploadFileResponse thisUploadFileResponse = new UploadFileResponse(fileName, fileDownloadUri,
 		                file.getContentType(), file.getSize());
 		        
-		        Picture pic = new Picture(fileName,"comment here",file.getSize(),users.findById(userId).get(),thisUploadFileResponse);
+		        Picture pic = new Picture(fileName,"comment here",file.getSize(),users.findById(userId).get());
 		    	pictures.save(pic);
 		               
 		        return new ResponseEntity  <UploadFileResponse> (thisUploadFileResponse, HttpStatus.OK);
+		        
 	    		}
 	    	}
+	    
+	  
 	    	
-		
+	    @GetMapping("/{userId}/getpictures")
+	    public ResponseEntity<?> getpicturesbyuser(@PathVariable Long userId){
+
+	    	ResponseEntity<?> result = null;
+	    	
+	    	if (users.findById(userId).isPresent()) {
+				result = new ResponseEntity<List<Picture>>(users.findById(userId).get().getPictures(), HttpStatus.OK);
+			} else {
+				result = new ResponseEntity<String>("No user with id " + userId, HttpStatus.NOT_FOUND);
+			}
+			return result;
+	    	
+	    }
 	    
 //	    la v2
 //	    @PostMapping("/uploadFile")
@@ -145,29 +166,31 @@ public class RegularController {
 //	    }
 
 	    
-	    public boolean isJpgOrPng(MultipartFile multipartFile) throws IOException{
-			
-			//conversion multipartFile to file
-			File file = new File(multipartFile.getOriginalFilename());
-			file.createNewFile(); 
-		    FileOutputStream fos = new FileOutputStream(file); 
-		    fos.write(multipartFile.getBytes());
-		    fos.close(); 
-		    
-		    
-			DataInputStream input = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
-	        int fileSignature = input.readInt();
-	            input.close();
-	        if (fileSignature == 0xffd8ffe0) {
-	            //File is jpeg
-	            return true;
-	        } else if(fileSignature == 0x89504E47){
-	            //file is in PNG
-	            return true;
-			} else {
-				return false;
-			}
-		}
+
+	    
+//	    public boolean isJpgOrPng(MultipartFile multipartFile) throws IOException{
+//			
+//			//conversion multipartFile to file
+//			File file = new File(multipartFile.getOriginalFilename());
+//			file.createNewFile(); 
+//		    FileOutputStream fos = new FileOutputStream(file); 
+//		    fos.write(multipartFile.getBytes());
+//		    fos.close(); 
+//		    
+//		    
+//			DataInputStream input = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
+//	        int fileSignature = input.readInt();
+//	            input.close();
+//	        if (fileSignature == 0xffd8 ) {
+//	            //File is jpeg - 0xffd8ffe0
+//	            return true;
+//	        } else if(fileSignature == 0x89504E47){
+//	            //file is in PNG
+//	            return true;
+//			} else {
+//				return false;
+//			}
+//		}
 
 		@GetMapping("/downloadFile/{fileName:.+}")
 	    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
