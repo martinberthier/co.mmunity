@@ -17,7 +17,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-import co.simplon.crud.model.task.Task;
 import lombok.Data;
 import net.community.domain.model.picture.Picture;
 import net.community.domain.model.role.Role;
@@ -101,5 +100,9 @@ public class User {
 		return new ArrayList<Picture>(pictures);
 	}
 	
+	public void removePicture(Picture picture)
+	{
+		this.pictures.remove(picture);
+	}
 	
 }

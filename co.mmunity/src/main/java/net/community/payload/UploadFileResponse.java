@@ -1,16 +1,10 @@
 package net.community.payload;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 
 
 public class UploadFileResponse {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	
 	
     private String fileName;
     private String fileDownloadUri;

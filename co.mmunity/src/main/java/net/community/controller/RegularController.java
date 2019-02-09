@@ -24,17 +24,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import co.simplon.crud.model.project.Project;
-import co.simplon.crud.model.task.Task;
 import net.community.domain.model.picture.IPictureRepository;
 import net.community.domain.model.picture.Picture;
 import net.community.domain.model.user.IUserRepository;
@@ -65,16 +65,19 @@ public class RegularController {
 	    @PostMapping("/{userId}/uploadFile")
 	    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable Long userId) throws Exception {
 	        
+	    	ResponseEntity<?> result = null;
 	    	
 	    	String mimeType = file.getContentType();
 	        String type = mimeType.split("/")[0];
 	        if (!type.equalsIgnoreCase("image")) {
 	    		
-	    		return new ResponseEntity<String>("The file is not an image", HttpStatus.CONFLICT);
+	    		result = new ResponseEntity<String>("The file is not an image", HttpStatus.CONFLICT);
+	    		
+	    		return result;
 	    		
 	    	} else {
 	    		
-		    	String fileName = userId+fileStorageService.storeFile(file);
+	    		String fileName = userId+fileStorageService.storeFile(file);
 		    	
 		        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
 		                .path("/regular/downloadFile/")
@@ -84,11 +87,26 @@ public class RegularController {
 		        UploadFileResponse thisUploadFileResponse = new UploadFileResponse(fileName, fileDownloadUri,
 		                file.getContentType(), file.getSize());
 		        
-		        Picture pic = new Picture(fileName,"comment here",file.getSize(),users.findById(userId).get());
-		    	pictures.save(pic);
+		        Picture picture = new Picture(fileName,"comment here",file.getSize(),users.findById(userId).get());
+		    	pictures.save(picture);
 		               
-		        return new ResponseEntity  <UploadFileResponse> (thisUploadFileResponse, HttpStatus.OK);
-		        
+//		        result = new ResponseEntity  <UploadFileResponse> (thisUploadFileResponse, HttpStatus.OK);
+	    		
+	    		if(users.findById(userId).isPresent()){
+	    			User user = users.findById(userId).get();
+	    			picture.setUser(user);
+	    			pictures.save(picture);
+	    			user.addPicture(picture);
+	    			users.save(user);
+	    			
+	    			result = new ResponseEntity<Picture>(picture, HttpStatus.OK);
+	    			
+	    		} else {
+	    			
+	    			result = new ResponseEntity<String>("Cannot create picture because there is no user with id" + userId, HttpStatus.NOT_FOUND);
+	    		}
+	    		
+	    		return result;
 	    		}
 	    	}
 	    
@@ -108,65 +126,30 @@ public class RegularController {
 	    	
 	    }
 	    
-//	    la v2
-//	    @PostMapping("/uploadFile")
-//	    //@PathVariable Long userId, 
-//	    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
-//	        
-//	    	
-//	    	if(isJpgOrPng(file)!=true) {
-//	    		
-//	    		String fileName = fileStorageService.storeFile(file);
-//	    		
-//		        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-//		                .path("/blabla/downloadFile/")
-//		                .path(fileName)
-//		                .toUriString();
-//	
-//		        return new UploadFileResponse(fileName, fileDownloadUri,
-//		                file.getContentType(), file.getSize());
-//	    		
-//	    	} else {
-//	    		
-//	    	
-//		    	String fileName = fileStorageService.storeFile(file);
-//	
-//		        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-//		                .path("/regular/downloadFile/")
-//		                .path(fileName)
-//		                .toUriString();
-//	
-//		        return new UploadFileResponse(fileName, fileDownloadUri,
-//		                file.getContentType(), file.getSize());
-//	    	
-//	    	}
-//
-//	    }
-	    
-//	    //la V1
-//	    @PostMapping("/uploadFile")
-//	    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
-//	        String fileName = fileStorageService.storeFile(file);
-//
-//	        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-//	                .path("/regular/downloadFile/")
-//	                .path(fileName)
-//	                .toUriString();
-//
-//	        return new UploadFileResponse(fileName, fileDownloadUri,
-//	                file.getContentType(), file.getSize());
-//	    }
+	    @DeleteMapping("/{idUser}/{idPicture}")
+		public ResponseEntity<?> deleteTask(@PathVariable Long idUser, @PathVariable Long idPicture) {
+			ResponseEntity<?> result = null;
+			if (!users.findById(idUser).isPresent()) {
 
-//	    @PostMapping("/uploadMultipleFiles")
-//	    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-//	        return Arrays.asList(files)
-//	                .stream()
-//	                .map(file -> uploadFile(file))
-//	                .collect(Collectors.toList());
-//	    }
+				result = new ResponseEntity<String>("No user with id " + idUser, HttpStatus.NO_CONTENT);
 
-	    
+			} else if (pictures.findById(idPicture) == null) {
+				result = new ResponseEntity<String>("No picture with id " + idPicture, HttpStatus.NO_CONTENT);
+			}
 
+			else {
+
+				User user = users.findById(idUser).get();
+				Picture picture = pictures.findById(idPicture).get();
+				user.removePicture(picture);
+				users.save(user);
+
+				result = new ResponseEntity<String>("", HttpStatus.OK);
+			}
+
+			return result;
+
+		}
 	    
 //	    public boolean isJpgOrPng(MultipartFile multipartFile) throws IOException{
 //			
