@@ -13,12 +13,12 @@ import net.community.domain.model.user.User;
 @Slf4j
 public class LoadDatabase {
 	
-	@Bean
-	CommandLineRunner initDatabase(IUserRepository users) {
-		return args -> {
-			log.info("Preloading" + users.save(new User("bob","bobby","job","bob@mail.com","123soleil",null, null, null,true)));
-			log.info("Preloading" + users.save(new User("eddy","mitchell","rockeur","eddy@mail.com","touteddy",null, null, null,true)));
-			
-		};	
-	}
+//	@Bean
+//	CommandLineRunner initDatabase(IUserRepository users) {
+//		return args -> {
+//			log.info("Preloading" + users.save(new User("bob","bobby","job","bob@mail.com","123soleil",null, null, null,true)));
+//			log.info("Preloading" + users.save(new User("eddy","mitchell","rockeur","eddy@mail.com","touteddy",null, null, null,true)));
+//			
+//		};	
+//	}
 }

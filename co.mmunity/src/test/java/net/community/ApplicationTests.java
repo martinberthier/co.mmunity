@@ -3,6 +3,10 @@ package net.community;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,26 +55,28 @@ public class ApplicationTests {
 		//populate.nettoyage();
 	}
 	
-//	@Test
-//	public void contextLoads() {
-//		Role vip = new Role("vip");
+	@Test
+	public void contextLoads() {
+		
+//		Role vip = new Role("vip", null);
 //		roles.save(vip);
 //		
-//		Tag dormir = new Tag("dormir");
+//		Tag dormir = new Tag("dormir", null);
 //		tags.save(dormir);
 //		
 //		Set<Tag>tagsAntoine = new HashSet<Tag>();
 //		tagsAntoine.add(dormir);
 //		
-//		Picture photoAntoine = new Picture("bonjour!","url12.com");
+//		Picture photoAntoine = new Picture("bonjour!","mon meilleur profil", 1564L, null);
+//		
 //		pictures.save(photoAntoine);
 //		
 //		Set<Picture>photosAntoine = new HashSet<Picture>();
 //		photosAntoine.add(photoAntoine);
 //		
-//		User antoine = new User("Peglion","Antoine","stagiaire","bactave@mail.com","mypassword",vip,tagsAntoine, photosAntoine);
+//		User antoine = new User("Peglion","Antoine","stagiaire","bactave@mail.com","mypassword",vip,tagsAntoine, photosAntoine, true);
 //		users.save(antoine);
-//	}
+	}
 
 }
 

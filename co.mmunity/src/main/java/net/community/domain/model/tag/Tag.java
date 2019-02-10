@@ -21,7 +21,7 @@ public class Tag {
 	
 	private String name;
 
-	@ManyToMany
+	@ManyToMany(mappedBy ="tags")
 	private Set<User> users = new HashSet<User> ();
 	
 	protected Tag() {}
@@ -31,6 +31,9 @@ public class Tag {
 		this.name = name;
 		this.users = users;
 	}
-
+	
+	public void addUser(User user) {
+		this.users.add(user);
+	}
 	
 }

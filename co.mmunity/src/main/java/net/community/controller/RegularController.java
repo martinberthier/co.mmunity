@@ -1,20 +1,9 @@
 package net.community.controller;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.io.filefilter.MagicNumberFileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +17,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,6 +27,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import net.community.domain.model.picture.IPictureRepository;
 import net.community.domain.model.picture.Picture;
+import net.community.domain.model.tag.ITagRepository;
+import net.community.domain.model.tag.Tag;
 import net.community.domain.model.user.IUserRepository;
 import net.community.domain.model.user.User;
 import net.community.payload.UploadFileResponse;
@@ -52,6 +44,9 @@ public class RegularController {
 	
 	@Autowired
 	IUserRepository users;
+	
+	@Autowired
+	ITagRepository tags;
 
 	    //////////////////////////////// DEBUT PARTIE IMAGE/////////////////////////
 	
@@ -151,30 +146,6 @@ public class RegularController {
 
 		}
 	    
-//	    public boolean isJpgOrPng(MultipartFile multipartFile) throws IOException{
-//			
-//			//conversion multipartFile to file
-//			File file = new File(multipartFile.getOriginalFilename());
-//			file.createNewFile(); 
-//		    FileOutputStream fos = new FileOutputStream(file); 
-//		    fos.write(multipartFile.getBytes());
-//		    fos.close(); 
-//		    
-//		    
-//			DataInputStream input = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
-//	        int fileSignature = input.readInt();
-//	            input.close();
-//	        if (fileSignature == 0xffd8 ) {
-//	            //File is jpeg - 0xffd8ffe0
-//	            return true;
-//	        } else if(fileSignature == 0x89504E47){
-//	            //file is in PNG
-//	            return true;
-//			} else {
-//				return false;
-//			}
-//		}
-
 		@GetMapping("/downloadFile/{fileName:.+}")
 	    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
 	        // Load file as Resource
@@ -198,6 +169,103 @@ public class RegularController {
 	                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
 	                .body(resource);
 	    }
+		
+		@GetMapping("/allPictures")
+		public List<Picture> getAllPictures() {
+			return pictures.findAll();
+		}
 	    
 	    ////////////////////////////////FIN PARTIE IMAGE/////////////////////////
+		
+
+		@GetMapping("/allUsers")
+		public List<User> getAllUsers() {
+			return users.findAll();
+		}
+		
+		@GetMapping("/allTags")
+		public List<Tag> getAllTags() {
+			return tags.findAll();
+		}
+		
+		@GetMapping("/allUsersByTag/") 
+		public List<User> getAllUsersByTag (@RequestBody Tag tag){
+			return users.findByTagsContains(tag);
+		}
+		
+		@GetMapping("/allTagsByUser/") 
+		public List<Tag> getAllTagsByUser (@RequestBody User user){
+			return tags.findByUsersContains(user);
+		}
+		
+		@GetMapping("/userName")
+		public ResponseEntity<?> getUserByName(@RequestBody String userName) {
+
+			ResponseEntity<?> result = null;
+			if (users.findByName(userName) != null) {
+				result = new ResponseEntity<User>(users.findByName(userName), HttpStatus.OK);
+			} else {
+				result = new ResponseEntity<String>("No user with name " + userName, HttpStatus.NO_CONTENT);
+			}
+			return result;
+		}
+		
+		@GetMapping("/tagName")
+		public ResponseEntity<?> getTagByName(@RequestBody String tagName) {
+
+			ResponseEntity<?> result = null;
+			if (tags.findByName(tagName) != null) {
+				result = new ResponseEntity<Tag>(tags.findByName(tagName), HttpStatus.OK);
+			} else {
+				result = new ResponseEntity<String>("No tag with name " + tagName, HttpStatus.NO_CONTENT);
+			}
+			return result;
+		}
+		
+		@PutMapping("/updateTag/{idUser}/tag")
+		public ResponseEntity<?> updateTag(@RequestBody Tag tag, @PathVariable Long idUser) {
+
+			ResponseEntity<?> result = null;
+			if (!users.findById(idUser).isPresent()) {
+				result = new ResponseEntity<String>("No user with id " + idUser, HttpStatus.NO_CONTENT);
+
+			} else if (tags.findByName(tag.getName()) == null) {
+				result = new ResponseEntity<String>("No tag with name " + tag.getName(), HttpStatus.NO_CONTENT);
+			}
+
+			else {
+				User user = users.findById(idUser).get();
+				tag.addUser(user);
+				tags.save(tag);
+				result = new ResponseEntity<String>("", HttpStatus.OK);
+			}
+
+			return result;
+		}
+		
+		@DeleteMapping("/removeTag/{idUser}/{idTag}")
+		public ResponseEntity<?> removeTag(@PathVariable Long idUser, @PathVariable Long idTag) {
+			ResponseEntity<?> result = null;
+			if (!users.findById(idUser).isPresent()) {
+
+				result = new ResponseEntity<String>("No user with id " + idUser, HttpStatus.NO_CONTENT);
+
+			} else if (tags.findById(idTag) == null) {
+				result = new ResponseEntity<String>("No tag with id " + idTag, HttpStatus.NO_CONTENT);
+			}
+
+			else {
+
+				User user = users.findById(idUser).get();
+				Tag tag = tags.findById(idTag).get();
+				user.removeTag(tag);
+				users.save(user);
+
+				result = new ResponseEntity<String>("", HttpStatus.OK);
+			}
+
+			return result;
+
+		}
+		
 }
