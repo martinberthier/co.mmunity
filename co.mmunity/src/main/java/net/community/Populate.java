@@ -135,19 +135,21 @@ public class Populate {
 //		picturesUtilisateur3.add(photo1Utilisateur3);
 //		picturesUtilisateur3.add(photo2Utilisateur3);
 		
-//		pictures.save(photo1Utilisateur1);
-//		pictures.save(photo2Utilisateur1);
-//		pictures.save(photo3Utilisateur1);
-//		
-//		pictures.save(photo1Utilisateur2);
-//		pictures.save(photo2Utilisateur2);
-//		
-//		pictures.save(photo1Utilisateur3);
-//		pictures.save(photo2Utilisateur3);
-		
 		users.save(martin);
 		users.save(claire);
 		users.save(juju);
+		
+		pictures.save(photo1Utilisateur1);
+		pictures.save(photo2Utilisateur1);
+		pictures.save(photo3Utilisateur1);
+		
+		pictures.save(photo1Utilisateur2);
+		pictures.save(photo2Utilisateur2);
+		
+		pictures.save(photo1Utilisateur3);
+		pictures.save(photo2Utilisateur3);
+		
+		
 		
 	}
 }
