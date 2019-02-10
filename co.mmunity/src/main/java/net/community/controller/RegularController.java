@@ -108,7 +108,7 @@ public class RegularController {
 	  
 	    	
 	    @GetMapping("/{userId}/getpictures")
-	    public ResponseEntity<?> getpicturesbyuser(@PathVariable Long userId){
+	    public ResponseEntity<?> getPicturesByUser(@PathVariable Long userId){
 
 	    	ResponseEntity<?> result = null;
 	    	

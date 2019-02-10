@@ -28,6 +28,11 @@ public class Role {
 
 	protected Role() {}
 
+	
+//	public Role(String name) {
+//		super();
+//		this.name = name;
+//	}
 	public Role(String name, Set<User> users) {
 		super();
 		this.name = name;

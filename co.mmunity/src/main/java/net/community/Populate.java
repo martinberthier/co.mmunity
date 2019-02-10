@@ -56,8 +56,12 @@ public class Populate {
 	
 	public void creerJeuDessai() {
 		
+		
+		
 		Role admin = new Role("administrateur", null);
 		Role regular = new Role("utilisateur lambda", null);
+//		Role admin = new Role("administrateur");
+//		Role regular = new Role("utilisateur lambda");
 		
 		roles.save(regular);
 		roles.save(admin);
@@ -74,6 +78,10 @@ public class Populate {
 		Tag musique = new Tag("Musique", null);
 		Tag cuisine = new Tag("Cuisine", null);
 		Tag poney = new Tag("Poney", null);
+//		Tag boxe = new Tag("Boxe");
+//		Tag musique = new Tag("Musique");
+//		Tag cuisine = new Tag("Cuisine");
+//		Tag poney = new Tag("Poney");
 		
 		tags.save(boxe);
 		tags.save(musique);
@@ -90,42 +98,52 @@ public class Populate {
 		Set<Tag>tagsUtilisateur3 = new HashSet<Tag>();
 		tagsUtilisateur3.add(musique);
 		
-		Picture photo1Utilisateur1 = new Picture("Ma première photo !","wow", 123L, null);
-		Picture photo2Utilisateur1 = new Picture("Ma première photo !","wow", 123L, null);
-		Picture photo3Utilisateur1 = new Picture("Ma première photo !","wow", 123L, null);
 		
-		Picture photo1Utilisateur2 = new Picture("Ma première photo !","wow", 123L, null);
-		Picture photo2Utilisateur2 = new Picture("Ma première photo !","wow", 123L, null);
 		
-		Picture photo1Utilisateur3 = new Picture("Ma première photo !","wow", 123L, null);
-		Picture photo2Utilisateur3 = new Picture("Ma première photo !","wow", 123L, null);
-		
-		pictures.save(photo1Utilisateur1);
-		pictures.save(photo2Utilisateur1);
-		pictures.save(photo3Utilisateur1);
-		
-		pictures.save(photo1Utilisateur2);
-		pictures.save(photo2Utilisateur2);
-		
-		pictures.save(photo1Utilisateur3);
-		pictures.save(photo2Utilisateur3);
 		
 		List<Picture>picturesUtilisateur1 = new ArrayList<Picture>();
-		picturesUtilisateur1.add(photo1Utilisateur1);
-		picturesUtilisateur1.add(photo2Utilisateur1);
-		picturesUtilisateur1.add(photo3Utilisateur1);
 		
 		List<Picture>picturesUtilisateur2 = new ArrayList<Picture>();
-		picturesUtilisateur2.add(photo1Utilisateur2);
-		picturesUtilisateur2.add(photo2Utilisateur2);
 		
 		List<Picture>picturesUtilisateur3 = new ArrayList<Picture>();
-		picturesUtilisateur3.add(photo1Utilisateur3);
-		picturesUtilisateur3.add(photo2Utilisateur3);
 		
 		User martin = new User("berthier","martin","developpeur","martinb@mail.com","123456", adminRole, tagsUtilisateur1, picturesUtilisateur1, true);
 		User claire = new User("peglion","claire","superstar","clairep@mail.com","topsecret",regularRole, tagsUtilisateur2, picturesUtilisateur2, true);
 		User juju = new User("crevette","juliette","diva","juju@mail.com","monmdp",regularRole,tagsUtilisateur3, picturesUtilisateur3, false);
+		
+		
+		
+		Picture photo1Utilisateur1 = new Picture("Ma première photo !","wow", 123L, martin);
+		Picture photo2Utilisateur1 = new Picture("Ma première photo !","wow", 123L, martin);
+		Picture photo3Utilisateur1 = new Picture("Ma première photo !","wow", 123L, martin);
+		
+		Picture photo1Utilisateur2 = new Picture("Ma première photo !","wow", 123L, claire);
+		Picture photo2Utilisateur2 = new Picture("Ma première photo !","wow", 123L, claire);
+		
+		Picture photo1Utilisateur3 = new Picture("Ma première photo !","wow", 123L, juju);
+		Picture photo2Utilisateur3 = new Picture("Ma première photo !","wow", 123L, juju);
+		
+//		picturesUtilisateur1.add(photo1Utilisateur1);
+//		picturesUtilisateur1.add(photo2Utilisateur1);
+//		picturesUtilisateur1.add(photo3Utilisateur1);
+//		
+//
+//		picturesUtilisateur2.add(photo1Utilisateur2);
+//		picturesUtilisateur2.add(photo2Utilisateur2);
+//		
+//
+//		picturesUtilisateur3.add(photo1Utilisateur3);
+//		picturesUtilisateur3.add(photo2Utilisateur3);
+		
+//		pictures.save(photo1Utilisateur1);
+//		pictures.save(photo2Utilisateur1);
+//		pictures.save(photo3Utilisateur1);
+//		
+//		pictures.save(photo1Utilisateur2);
+//		pictures.save(photo2Utilisateur2);
+//		
+//		pictures.save(photo1Utilisateur3);
+//		pictures.save(photo2Utilisateur3);
 		
 		users.save(martin);
 		users.save(claire);

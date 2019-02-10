@@ -25,7 +25,12 @@ public class Tag {
 	private Set<User> users = new HashSet<User> ();
 	
 	protected Tag() {}
-
+//
+//	public Tag(String name) {
+//		super();
+//		this.name = name;
+//	}
+	
 	public Tag(String name, Set<User> users) {
 		super();
 		this.name = name;
