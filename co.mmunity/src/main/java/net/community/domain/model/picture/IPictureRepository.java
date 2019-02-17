@@ -8,9 +8,9 @@ import net.community.domain.model.user.User;
 
 public interface IPictureRepository extends JpaRepository <Picture, Long> {
 	
-	List<Picture> findByUser(User user);
-	
-	List<Picture> findByUserId(long id);
+//	List<Picture> findByUser(User user);
+//	
+//	List<Picture> findByUserId(long id);
 	
 	Picture findById(long id);
 	

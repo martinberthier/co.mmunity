@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 import net.community.domain.model.user.User;
 
@@ -24,6 +26,7 @@ public class Role {
 	private String name;
 	
 	@ManyToMany(mappedBy ="roles")
+	@JsonIgnore
 	private Set<User> users = new HashSet<User> ();
 
 	protected Role() {}
@@ -39,8 +42,5 @@ public class Role {
 		this.users = users;
 	}
 
-	
-
-	
 
 }

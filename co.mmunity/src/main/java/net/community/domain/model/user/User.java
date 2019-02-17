@@ -12,12 +12,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import net.community.domain.model.picture.Picture;
@@ -56,7 +58,8 @@ public class User {
 	
 	//@NotEmpty
 	@ManyToMany
-	@JoinColumn(name = "role_id")
+	@JoinTable(name = "role_id")
+	@JsonIgnore
 	private Set<Role> roles = new HashSet<Role>();
 	
 	
@@ -66,11 +69,13 @@ public class User {
 	//LAZY : la valeur est chargée uniquement lors de son utilisation
 	//EAGER : la valeur est toujours chargée (valeur par défaut)
 	//Cette fonctionnalité permet de limiter la quantité de données obtenue par une requête
-	@JoinColumn(name = "tags_id")
+	@JoinTable(name = "tags_id")
+	@JsonIgnore
 	private Set<Tag>tags= new HashSet<Tag>();
 	
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
 	@JoinColumn(name = "pictures_id")
+	@JsonIgnore
 	private List<Picture>pictures = new ArrayList<Picture>();
 
 	private boolean active;

@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import net.community.domain.model.user.User;
@@ -26,18 +27,17 @@ public class Picture {
 	
 	private Long size;
 	
-	@ManyToOne
-	private User user;
+
 	
 
 	protected Picture() {}
 
-	public Picture(String name, String pictureComment, Long size, User user) {
+	public Picture(String name, String pictureComment, Long size) {
 		super();
 		this.name = name;
 		this.pictureComment = pictureComment;
 		this.size = size;
-		this.user = user;
+
 	}
 
 	

@@ -57,9 +57,11 @@ public class RegularController {
 	    IFileStorageService fileStorageService;
 	
 	    
-	    @PostMapping("/{userId}/uploadFile")
-	    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable Long userId) throws Exception {
+	    @PostMapping("/uploadFile")
+	    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) throws Exception {
+	  	
 	        
+	    
 	    	ResponseEntity<?> result = null;
 	    	
 	    	String mimeType = file.getContentType();
@@ -72,8 +74,8 @@ public class RegularController {
 	    		
 	    	} else {
 	    		
-	    		String fileName = userId+fileStorageService.storeFile(file);
-		    	
+	    		String fileName = fileStorageService.storeFile(file);
+		  
 		        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
 		                .path("/regular/downloadFile/")
 		                .path(fileName)
@@ -82,27 +84,18 @@ public class RegularController {
 		        UploadFileResponse thisUploadFileResponse = new UploadFileResponse(fileName, fileDownloadUri,
 		                file.getContentType(), file.getSize());
 		        
-		        Picture picture = new Picture(fileName,"comment here",file.getSize(),users.findById(userId).get());
+		        Picture picture = new Picture(fileName,"comment here",file.getSize());
 		    	pictures.save(picture);
 		               
-//		        result = new ResponseEntity  <UploadFileResponse> (thisUploadFileResponse, HttpStatus.OK);
+		    	result = new ResponseEntity  <UploadFileResponse> (thisUploadFileResponse, HttpStatus.OK);
 	    		
-	    		if(users.findById(userId).isPresent()){
-	    			User user = users.findById(userId).get();
-	    			picture.setUser(user);
-	    			pictures.save(picture);
-	    			user.addPicture(picture);
-	    			users.save(user);
 	    			
-	    			result = new ResponseEntity<Picture>(picture, HttpStatus.OK);
+	    			//result = new ResponseEntity<Picture>(picture, HttpStatus.OK);
 	    			
-	    		} else {
-	    			
-	    			result = new ResponseEntity<String>("Cannot create picture because there is no user with id" + userId, HttpStatus.NOT_FOUND);
-	    		}
-	    		
+	    		} 
+	        
 	    		return result;
-	    		}
+	    		
 	    	}
 	    
 	  
@@ -182,6 +175,7 @@ public class RegularController {
 		public List<User> getAllUsers() {
 			return users.findAll();
 		}
+		//stack overflow error
 		
 		@GetMapping("/allTags")
 		public List<Tag> getAllTags() {
